@@ -1,3 +1,9 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@layer utilities {
+	.container-content {
+		@apply mx-auto max-w-7xl px-4;
+	}
+}

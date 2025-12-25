@@ -40,7 +40,7 @@
 	};
 </script>
 
-<div class="container pt-4">
+<div class="container-content pt-4">
 	<h1>Sign Up</h1>
 	<form onsubmit={handleSignUp}>
 		<fieldset>
