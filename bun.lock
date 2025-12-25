@@ -8,6 +8,7 @@
         "@picocss/pico": "^2.1.1",
         "better-auth": "^1.4.9",
         "postgres": "^3.4.7",
+        "zod": "^4.2.1",
       },
       "devDependencies": {
         "@eslint/compat": "^1.4.0",

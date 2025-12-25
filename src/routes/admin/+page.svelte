@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CreatePost from './create-post.svelte';
 	import { getAllPosts } from './posts.remote';
 
 	const posts = $derived(await getAllPosts());
@@ -7,6 +8,7 @@
 <div class="container-content">
 	<h1>Admin</h1>
 	<p>This is the admin page</p>
+	<CreatePost />
 	<table>
 		<thead>
 			<tr>
