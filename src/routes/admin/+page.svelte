@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
-	import CreatePost from './create-post.svelte';
 	import { deletePost, getAllPosts } from '$lib/remote/posts.remote';
 
 	const posts = $derived(await getAllPosts());
@@ -15,7 +13,6 @@
 	<h1>Admin</h1>
 	<p>This is the admin page</p>
 	<button onclick={() => goto('/admin/post/new')}>New Post</button>
-	<CreatePost />
 	<table>
 		<thead>
 			<tr>
