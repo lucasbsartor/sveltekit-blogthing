@@ -18,6 +18,16 @@ export const getPostById = query(z.object({ id: z.string() }), async ({ id }) =>
 	return result;
 });
 
+export const getPostBySlug = query(z.object({ slug: z.string() }), async ({ slug }) => {
+	const result = await db.query.post.findFirst({ where: eq(post.slug, slug) });
+
+	if (!result) {
+		return error(404, 'Post not found');
+	}
+
+	return result;
+});
+
 export const createPost = form(
 	z.object({
 		title: z.string().min(1),
@@ -29,7 +39,7 @@ export const createPost = form(
 			headers: event.request.headers
 		});
 
-		if (!session?.user) {
+		if (!session?.user || session.user.role !== 'admin') {
 			return error(401, 'Unauthorized');
 		}
 
@@ -58,7 +68,7 @@ export const updatePost = form(
 			headers: event.request.headers
 		});
 
-		if (!session?.user) {
+		if (!session?.user || session.user.role !== 'admin') {
 			return error(401, 'Unauthorized');
 		}
 
@@ -83,7 +93,7 @@ export const deletePost = command(z.object({ id: z.string() }), async ({ id }) =
 		headers: event.request.headers
 	});
 
-	if (!session?.user) {
+	if (!session?.user || session.user.role !== 'admin') {
 		return error(401, 'Unauthorized');
 	}
 

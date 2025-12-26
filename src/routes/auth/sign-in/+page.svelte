@@ -3,6 +3,17 @@
 	import { authClient } from '$lib/auth-client';
 	import { resolve } from '$app/paths';
 	import { getUser } from '$lib/remote/user.remote';
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import * as Field from '$lib/components/ui/field';
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardFooter,
+		CardHeader,
+		CardTitle
+	} from '$lib/components/ui/card';
 
 	let error = $state<string | null>(null);
 
@@ -34,27 +45,47 @@
 	};
 </script>
 
-<div class="container-content pt-4">
-	<h1>Sign In</h1>
-	{#if error}
-		<div class="error" role="alert">
-			<p>{error}</p>
-		</div>
-	{/if}
-	<form onsubmit={handleSignIn}>
-		<fieldset>
-			<label>
-				Email
-				<input type="email" name="email" id="email" placeholder="Email" required />
-			</label>
-			<label>
-				Password
-				<input type="password" name="password" id="password" placeholder="Password" required />
-			</label>
-		</fieldset>
-		<input type="submit" value="Sign In" />
-	</form>
-	<p class="redirect">
-		Don't have an account? <a href={resolve('/auth/sign-up')}>Sign up</a>
-	</p>
+<div class="flex min-h-[calc(100vh-200px)] items-center justify-center">
+	<Card class="w-full max-w-md">
+		<CardHeader>
+			<CardTitle>Sign In</CardTitle>
+			<CardDescription>Enter your credentials to access your account</CardDescription>
+		</CardHeader>
+		<form onsubmit={handleSignIn}>
+			<CardContent>
+				<Field.Set>
+					<Field.Group>
+						{#if error}
+							<Field.Field>
+								<Field.Error>{error}</Field.Error>
+							</Field.Field>
+						{/if}
+						<Field.Field>
+							<Field.Label for="email">Email</Field.Label>
+							<Input type="email" id="email" name="email" placeholder="Email" required />
+						</Field.Field>
+						<Field.Field>
+							<Field.Label for="password">Password</Field.Label>
+							<Input
+								type="password"
+								id="password"
+								name="password"
+								placeholder="Password"
+								required
+							/>
+						</Field.Field>
+					</Field.Group>
+				</Field.Set>
+			</CardContent>
+			<CardFooter class="flex flex-col gap-4">
+				<Button type="submit" class="w-full">Sign In</Button>
+				<p class="text-center text-sm text-muted-foreground">
+					Don't have an account? <a
+						href={resolve('/auth/sign-up')}
+						class="text-primary hover:underline">Sign up</a
+					>
+				</p>
+			</CardFooter>
+		</form>
+	</Card>
 </div>
