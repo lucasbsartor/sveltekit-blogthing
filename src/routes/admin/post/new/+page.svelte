@@ -9,14 +9,14 @@
 			Title
 			<input {...createPost.fields.title.as('text')} />
 		</label>
-		{#each createPost.fields.title.issues() as issue}
+		{#each createPost.fields.title.issues() as issue (issue.message)}
 			<p>{issue.message}</p>
 		{/each}
 		<label>
 			Content
 			<textarea {...createPost.fields.content.as('text')}></textarea>
 		</label>
-		{#each createPost.fields.content.issues() as issue}
+		{#each createPost.fields.content.issues() as issue (issue.message)}
 			<p>{issue.message}</p>
 		{/each}
 		<button type="submit">Post</button>

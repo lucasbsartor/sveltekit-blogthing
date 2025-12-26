@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client';
+	import { resolve } from '$app/paths';
+	import { getUser } from '$lib/remote/user.remote';
 
 	let confirmPasswordError = $state<boolean | undefined>();
 
@@ -27,8 +29,9 @@
 				password
 			},
 			{
-				onSuccess: () => {
-					goto('/');
+				onSuccess: async () => {
+					await getUser().refresh();
+					goto(resolve('/'));
 				}
 			}
 		);

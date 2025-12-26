@@ -13,14 +13,14 @@
 			Title
 			<input {...updatePost.fields.title.as('text')} value={post.title} />
 		</label>
-		{#each updatePost.fields.title.issues() as issue}
+		{#each updatePost.fields.title.issues() as issue (issue.message)}
 			<p>{issue.message}</p>
 		{/each}
 		<label>
 			Content
 			<textarea {...updatePost.fields.content.as('text')} value={post.content}></textarea>
 		</label>
-		{#each updatePost.fields.content.issues() as issue}
+		{#each updatePost.fields.content.issues() as issue (issue.message)}
 			<p>{issue.message}</p>
 		{/each}
 		<button type="submit">Post</button>
