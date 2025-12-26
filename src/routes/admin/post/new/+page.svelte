@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPost } from '../../posts.remote';
+	import { createPost } from '$lib/remote/posts.remote';
 </script>
 
 <div class="container-content">
