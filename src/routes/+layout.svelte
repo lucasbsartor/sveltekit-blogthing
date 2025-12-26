@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.svg';
-	import '@picocss/pico';
 	import './layout.css';
 	import { getUser } from '$lib/remote/user.remote';
 	import { authClient } from '$lib/auth-client';
