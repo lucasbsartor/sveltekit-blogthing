@@ -1,67 +1,59 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { deletePost, getAllPosts } from '$lib/remote/posts.remote';
 	import { Button } from '$lib/components/ui/button';
-	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-	import {
-		Table,
-		TableBody,
-		TableCell,
-		TableHead,
-		TableHeader,
-		TableRow
-	} from '$lib/components/ui/table';
-
-	const posts = $derived.by(async () => await getAllPosts());
+	import * as Item from '$lib/components/ui/item/index.js';
+	import { deletePost, getAllPosts } from '$lib/remote/posts.remote';
+	import EyeIcon from '@lucide/svelte/icons/eye';
+	import PlusIcon from '@lucide/svelte/icons/plus';
+	import SquarePenIcon from '@lucide/svelte/icons/square-pen';
+	import Trash2Icon from '@lucide/svelte/icons/trash-2';
+	const posts = $derived(await getAllPosts());
 
 	const handleDeletePost = async (id: string) => {
-		await deletePost({ id }).updates(getAllPosts());
+		if (confirm('Are you sure you want to delete this post?')) {
+			await deletePost({ id }).updates(getAllPosts());
+		}
 	};
 </script>
 
-<Card>
-	<CardHeader class="flex flex-row items-center justify-between">
-		<CardTitle>Admin Dashboard</CardTitle>
-		<Button onclick={() => goto(resolve('/admin/post/new'))}>New Post</Button>
-	</CardHeader>
-	<CardContent>
-		<Table>
-			<TableHeader>
-				<TableRow>
-					<TableHead>Title</TableHead>
-					<TableHead>Slug</TableHead>
-					<TableHead>Author</TableHead>
-					<TableHead>Created At</TableHead>
-					<TableHead>Updated At</TableHead>
-					<TableHead>Actions</TableHead>
-				</TableRow>
-			</TableHeader>
-			<TableBody>
-				{#await posts then postList}
-					{#each postList as post (post.id)}
-						<TableRow>
-							<TableCell>{post.title}</TableCell>
-							<TableCell>{post.slug}</TableCell>
-							<TableCell>{post.authorId}</TableCell>
-							<TableCell>{post.createdAt.toLocaleString()}</TableCell>
-							<TableCell>{post.updatedAt.toLocaleString()}</TableCell>
-							<TableCell>
-								<div class="flex gap-2">
-									<Button
-										variant="outline"
-										size="sm"
-										onclick={() => goto(resolve(`/admin/post/${post.id}`))}>Edit</Button
-									>
-									<Button variant="destructive" size="sm" onclick={() => handleDeletePost(post.id)}
-										>Delete</Button
-									>
-								</div>
-							</TableCell>
-						</TableRow>
-					{/each}
-				{/await}
-			</TableBody>
-		</Table>
-	</CardContent>
-</Card>
+<div class="space-y-4">
+	<div class="flex items-center justify-between">
+		<div>
+			<h1 class="text-2xl font-bold">Posts</h1>
+			<p class="text-muted-foreground">Manage your blog posts</p>
+		</div>
+		<Button
+			onclick={() => goto(resolve('/admin/post/new'))}
+			class="transition-transform hover:scale-105"
+		>
+			<PlusIcon class="mr-2 size-4" />
+			New Post
+		</Button>
+	</div>
+	{#if posts.length > 0}
+		<Item.Group class="space-y-4">
+			{#each posts as post (post.id)}
+				<Item.Root variant="outline">
+					<Item.Content>
+						<Item.Title>{post.title}</Item.Title>
+						<Item.Description
+							>{post.createdAt.toLocaleDateString()} - By {post.authorId}</Item.Description
+						>
+					</Item.Content>
+					<Item.Actions>
+						<Button variant="outline" size="icon-sm" href={resolve(`/blog/${post.slug}`)}>
+							<EyeIcon class="size-4" />
+						</Button>
+						<Button variant="outline" size="icon-sm" href={resolve(`/admin/post/${post.id}`)}>
+							<SquarePenIcon class="size-4" />
+						</Button>
+						<Button variant="destructive" size="icon-sm" onclick={() => handleDeletePost(post.id)}
+							><Trash2Icon class="size-4" />
+						</Button>
+					</Item.Actions>
+				</Item.Root>
+			{/each}
+		</Item.Group>
+	{:else}{/if}
+</div>

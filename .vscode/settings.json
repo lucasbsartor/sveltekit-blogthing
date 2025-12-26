@@ -2,5 +2,9 @@
 	"files.associations": {
 		"*.css": "tailwindcss"
 	},
-	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "svelte"]
+	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "svelte"],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always",
+		"source.organizeImports": "always"
+	}
 }

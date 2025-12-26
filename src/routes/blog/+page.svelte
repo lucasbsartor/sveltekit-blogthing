@@ -1,33 +1,45 @@
 <script lang="ts">
-	import * as Item from '$lib/components/ui/item/index.js';
 	import { resolve } from '$app/paths';
-	import { Button } from '$lib/components/ui/button';
+	import * as Empty from '$lib/components/ui/empty/index.js';
+	import * as Item from '$lib/components/ui/item/index.js';
 	import { getAllPosts } from '$lib/remote/posts.remote';
+	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
+	import FileTextIcon from '@lucide/svelte/icons/file-text';
 
 	const posts = $derived(await getAllPosts());
 </script>
 
-<h1 class="text-3xl font-bold">Blog</h1>
-<div class="space-y-6">
-	{#if !posts}
-		<p class="text-muted-foreground">No posts yet. Check back later!</p>
-	{:else}
-		<div class="flex flex-col gap-6">
-			{#each posts as post (post.slug)}
-				<Item.Root variant="outline">
-					<Item.Content>
-						<Item.Title>{post.title}</Item.Title>
-						<Item.Description>
-							{post.createdAt.toLocaleDateString()}
-						</Item.Description>
-					</Item.Content>
-					<Item.Actions>
-						<Button variant="outline" size="sm" href={resolve(`/blog/${post.slug}`)}
-							>Read More</Button
-						>
-					</Item.Actions>
+<div>
+	{#if posts.length > 0}
+		<Item.Group>
+			{#each posts as post, index (post.id)}
+				<Item.Root>
+					{#snippet child({ props })}
+						<a href={resolve(`/blog/${post.slug}`)} {...props}>
+							<Item.Content>
+								<Item.Title>{post.title}</Item.Title>
+								<Item.Description>{post.content.slice(0, 100)}...</Item.Description>
+							</Item.Content>
+							<Item.Actions>
+								<ChevronRightIcon class="size-4" />
+							</Item.Actions>
+						</a>
+					{/snippet}
 				</Item.Root>
+				{#if index !== posts.length - 1}
+					<Item.Separator />
+				{/if}
 			{/each}
-		</div>
+		</Item.Group>
+	{:else}
+		<Empty.Root>
+			<Empty.Header>
+				<Empty.Media variant="icon">
+					<FileTextIcon />
+				</Empty.Media>
+				<Empty.Title>No Posts Yet</Empty.Title>
+				<Empty.Description>Come back later to see the latest posts.</Empty.Description>
+			</Empty.Header>
+		</Empty.Root>
 	{/if}
 </div>
